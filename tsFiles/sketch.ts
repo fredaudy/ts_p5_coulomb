@@ -2,6 +2,7 @@
 
 let prg: p5 = new p5();
 let pt: Coulomb[] = [];
+let mx: Matrix = new Matrix();
 
 function setup() {
     prg.createCanvas(1200, 700);
@@ -13,6 +14,11 @@ function setup() {
         prg.stroke(255);
         prg.ellipse(pt[i].point.x, pt[i].point.y, 20, 20);
     }
+
+    mx.dim = pt.length;
+    mx.emptyMatrix();
+    mx.calculDistance(pt);
+    console.log(mx.distance);
 }
 
 function draw() {
