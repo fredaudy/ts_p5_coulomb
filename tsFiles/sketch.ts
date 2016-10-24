@@ -16,11 +16,31 @@ function setup() {
     }
 
     mx.dim = pt.length;
+    mx.coef = 1000;
     mx.emptyMatrix();
     mx.calculDistance(pt);
-    console.log(mx.distance);
+    mx.calculForce(pt);
+    mx.calulForceAxis(pt);
+    mx.calculForceSum();
+    console.log(mx.forceSumX);
+    // console.log(mx.force);
+    // console.log(mx.forceXaxis);
+    // console.log(mx.forceYaxis);
 }
 
 function draw() {
+    prg.background(175);
+    for (let c = 0; c < pt.length; c++) {
+        pt[c].point.x += mx.forceSumX[c];
+        pt[c].point.y += mx.forceSumY[c];
 
+        prg.fill(175);
+        prg.stroke(255);
+        prg.ellipse(pt[c].point.x, pt[c].point.y, 20, 20);
+    }
+    mx.emptyMatrix();
+    mx.calculDistance(pt);
+    mx.calculForce(pt);
+    mx.calulForceAxis(pt);
+    mx.calculForceSum();
 }
