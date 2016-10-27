@@ -4,12 +4,20 @@ let prg: p5 = new p5();
 let pt: Coulomb[] = [];
 let mx: Matrix = new Matrix();
 
+let red;
+let coefForce: number = 500;
+
+let nbPoints: number = 3
+
 function setup() {
     prg.createCanvas(1200, 700);
     prg.background(175);
+    red = prg.color(255, 0, 0);
 
-    for (let i = 0; i < 15; i++) {
-        pt.push(new Coulomb(prg.width * (i + 1) / 16, prg.height * (i + 1) / 16, 1));
+    for (let i = 0; i < nbPoints; i++) {
+        let charge = Math.pow(-1, i);
+        // charge = -1;
+        pt.push(new Coulomb(prg.width * (i + 1) / (nbPoints + 1), prg.height * (i + 1) / (nbPoints + 1), charge));
         prg.fill(175);
         prg.stroke(255);
         prg.ellipse(pt[i].point.x, pt[i].point.y, 20, 20);
@@ -37,6 +45,11 @@ function draw() {
         prg.fill(175);
         prg.stroke(255);
         prg.ellipse(pt[c].point.x, pt[c].point.y, 20, 20);
+        prg.stroke(red);
+        prg.line(pt[c].point.x, 
+            pt[c].point.y, 
+            pt[c].point.x + mx.forceSumX[c]*coefForce, 
+            pt[c].point.y + mx.forceSumY[c]*coefForce);
     }
     mx.emptyMatrix();
     mx.calculDistance(pt);

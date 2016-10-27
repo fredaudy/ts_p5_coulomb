@@ -70,9 +70,9 @@ class Matrix {
         for (let c = 0; c < pt.length; c++) {
             for (let r = c; r < pt.length; r++) {
                 if (r != c) {
-                    this.force[c][r] = this.coef * pt[c].charge * pt[r].charge / 
+                    this.force[c][r] = this.coef / 
                         (this.distance[c][r] * this.distance[c][r]);
-                    this.distance[r][c] = -this.force[c][r];
+                    this.force[r][c] = this.force[c][r];
                 } else {
                     this.force[c][r] = 0;
                 }
@@ -84,9 +84,9 @@ class Matrix {
         for (let c = 0; c < pt.length; c++) {
             for (let r = c; r < pt.length; r++) {
                 if (r != c) {
-                    this.forceXaxis[c][r] = (pt[r].point.x - pt[c].point.x)
+                    this.forceXaxis[c][r] = Math.sqrt( Math.pow((pt[r].point.x - pt[c].point.x), 2) )
                         * this.force[c][r] / this.distance[c][r];
-                    this.forceYaxis[c][r] = (pt[r].point.y - pt[c].point.y)
+                    this.forceYaxis[c][r] = Math.sqrt( Math.pow((pt[r].point.y - pt[c].point.y), 2) )
                         * this.force[c][r] / this.distance[c][r];
 
                     this.forceXaxis[r][c] = -this.forceXaxis[c][r];
@@ -101,9 +101,9 @@ class Matrix {
 
     calculForceSum(){
         for (let c = 0; c < this.force[0].length; c++) {
-            for (let r = c; r < this.force[0].length; r++) {
-                this.forceSumX[c] += this.forceXaxis[c][r];
-                this.forceSumY[c] += this.forceYaxis[c][r];
+            for (let r = 0; r < this.force[0].length; r++) {
+                this.forceSumX[c] += -(pt[c].charge*pt[r].charge) * this.forceXaxis[c][r];
+                this.forceSumY[c] += -(pt[c].charge*pt[r].charge) * this.forceYaxis[c][r];
             }            
         }
     }
