@@ -17,7 +17,7 @@ function setup() {
     for (let i = 0; i < nbPoints; i++) {
         let charge = Math.pow(-1, i);
         // charge = -1;
-        pt.push(new Coulomb(prg.width * (i + 1) / (nbPoints + 1), prg.height * (i + 1) / (nbPoints + 1), charge));
+        pt.push(new Coulomb(prg.width * (i + 1) / (nbPoints + 1), prg.height * (i + 1) / (nbPoints + 1), charge, 3));
         prg.fill(175);
         prg.stroke(255);
         prg.ellipse(pt[i].point.x, pt[i].point.y, 20, 20);
@@ -39,8 +39,7 @@ function setup() {
 function draw() {
     prg.background(175);
     for (let c = 0; c < pt.length; c++) {
-        pt[c].point.x += mx.forceSumX[c];
-        pt[c].point.y += mx.forceSumY[c];
+        pt[c].majVitesse(mx.forceSumX[c], mx.forceSumY[c], prg.width, prg.height);
 
         prg.fill(175);
         prg.stroke(255);
