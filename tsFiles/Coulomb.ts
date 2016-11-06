@@ -26,21 +26,35 @@ class Coulomb {
         this.vitesse.x += _SumForceX;
         this.vitesse.y += _SumForceY;
 
-        //if(this.edgeDectection(_canvas_width, _canvas_height)){
-            this.majPosition();
-        //}
+        this.edgeDectection(_canvas_width, _canvas_height, 10);
+        this.majPosition();
 
     }
 
-    edgeDectection(_canvas_width: number, _canvas_height: number): boolean {
-        if(this.point.x-this.distMaxParFrame <= 0
-        || this.point.y-this.distMaxParFrame <= 0
-        || this.point.x+this.distMaxParFrame >= _canvas_width
-        || this.point.x+this.distMaxParFrame >= _canvas_height){
-            return false;
+    edgeDectection(_canvas_width: number, _canvas_height: number, _pt_radius: number) {
+        // border up
+        if (this.point.x - this.distMaxParFrame <= _pt_radius
+            && this.vitesse.x < 0) {
+            this.vitesse.x = 0;
         }
 
-        return true;
+        // border down
+        if (this.point.x + this.distMaxParFrame >= _canvas_width - _pt_radius
+            && this.vitesse.x > 0) {
+            this.vitesse.x = 0;
+        }
+
+        // border left
+        if (this.point.y - this.distMaxParFrame <= _pt_radius
+            && this.vitesse.y < 0) {
+            this.vitesse.y = 0;
+        }
+
+        // boder right
+        if (this.point.y + this.distMaxParFrame >= _canvas_height - _pt_radius
+            && this.vitesse.y > 0) {
+            this.vitesse.y = 0;
+        }
     }
 
     majPosition() {
@@ -97,7 +111,7 @@ class Matrix {
             for (let r = c; r < pt.length; r++) {
                 let x = pt[c].point.x - pt[r].point.x;
                 let y = pt[c].point.y - pt[r].point.y;
-                let dist = this.distance[c][r] = Math.sqrt(x * x - y * y);
+                let dist = this.distance[c][r] = Math.sqrt(x * x + y * y);
                 this.distance[c][r] = dist;
                 this.distance[r][c] = dist;
             }
@@ -122,9 +136,9 @@ class Matrix {
         for (let c = 0; c < pt.length; c++) {
             for (let r = c; r < pt.length; r++) {
                 if (r != c) {
-                    this.forceXaxis[c][r] = Math.sqrt(Math.pow((pt[r].point.x - pt[c].point.x), 2))
+                    this.forceXaxis[c][r] = (pt[c].point.x - pt[r].point.x)
                         * this.force[c][r] / this.distance[c][r];
-                    this.forceYaxis[c][r] = Math.sqrt(Math.pow((pt[r].point.y - pt[c].point.y), 2))
+                    this.forceYaxis[c][r] = (pt[c].point.y - pt[r].point.y)
                         * this.force[c][r] / this.distance[c][r];
 
                     this.forceXaxis[r][c] = -this.forceXaxis[c][r];
@@ -140,8 +154,8 @@ class Matrix {
     calculForceSum() {
         for (let c = 0; c < this.force[0].length; c++) {
             for (let r = 0; r < this.force[0].length; r++) {
-                this.forceSumX[c] += -(pt[c].charge * pt[r].charge) * this.forceXaxis[c][r];
-                this.forceSumY[c] += -(pt[c].charge * pt[r].charge) * this.forceYaxis[c][r];
+                this.forceSumX[c] += (pt[c].charge * pt[r].charge) * this.forceXaxis[c][r];
+                this.forceSumY[c] += (pt[c].charge * pt[r].charge) * this.forceYaxis[c][r];
             }
         }
     }

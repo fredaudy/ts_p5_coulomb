@@ -4,22 +4,29 @@ let prg: p5 = new p5();
 let pt: Coulomb[] = [];
 let mx: Matrix = new Matrix();
 
-let red;
-let coefForce: number = 500;
+let colorCharge: p5.Color[] = [];
+let colorVectorForce: p5.Color;
 
-let nbPoints: number = 3
+let coefForce: number = 1000;
+
+let nbPoints: number = 5;
 
 function setup() {
     prg.createCanvas(1200, 700);
-    prg.background(175);
-    red = prg.color(255, 0, 0);
+    prg.background(195);
+    
+    colorVectorForce = prg.color(142, 162, 198);
+
+    colorCharge.push(prg.color(34, 120, 15)); // couleur pour les charges -1
+    colorCharge.push(prg.color(255));
+    colorCharge.push(prg.color(255, 94, 77)); // couleur pour les charges +1
 
     for (let i = 0; i < nbPoints; i++) {
         let charge = Math.pow(-1, i);
         // charge = -1;
-        pt.push(new Coulomb(prg.width * (i + 1) / (nbPoints + 1), prg.height * (i + 1) / (nbPoints + 1), charge, 3));
+        pt.push(new Coulomb( prg.width * (i + 1) / (nbPoints + 1), prg.height * (i + 1) / (nbPoints + 1), charge, 3));
         prg.fill(175);
-        prg.stroke(255);
+        prg.stroke(colorCharge[pt[i].charge+1]);
         prg.ellipse(pt[i].point.x, pt[i].point.y, 20, 20);
     }
 
@@ -37,14 +44,14 @@ function setup() {
 }
 
 function draw() {
-    prg.background(175);
+    prg.background(195);
     for (let c = 0; c < pt.length; c++) {
         pt[c].majVitesse(mx.forceSumX[c], mx.forceSumY[c], prg.width, prg.height);
 
         prg.fill(175);
-        prg.stroke(255);
+        prg.stroke(colorCharge[pt[c].charge+1]);
         prg.ellipse(pt[c].point.x, pt[c].point.y, 20, 20);
-        prg.stroke(red);
+        prg.stroke(colorVectorForce);
         prg.line(pt[c].point.x, 
             pt[c].point.y, 
             pt[c].point.x + mx.forceSumX[c]*coefForce, 
